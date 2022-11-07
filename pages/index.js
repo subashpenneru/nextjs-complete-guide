@@ -1,11 +1,40 @@
-import Head from 'next/head';
-import Image from 'next/image';
-import styles from '../styles/Home.module.css';
+import path from 'path';
+import fs from 'fs/promises';
 
-export default function Home() {
+import Link from 'next/link';
+
+function HomePage(props) {
+  const { products } = props;
   return (
-    <div className={styles.container}>
-      <h1>Hello World</h1>
-    </div>
+    <ul>
+      {products.map((p) => (
+        <li key={p.id}>
+          <Link href={`/${p.id}`}>{p.title}</Link>
+        </li>
+      ))}
+    </ul>
   );
 }
+
+export async function getStaticProps() {
+  const filePath = path.join(process.cwd(), 'data', 'dummy-backend.json');
+  const jsonData = await fs.readFile(filePath);
+  const data = JSON.parse(jsonData);
+
+  if (!data) {
+    return { redirect: { destination: '/no-data' } };
+  }
+
+  if (data.products?.length === 0) {
+    return { notFound: true };
+  }
+
+  return {
+    props: {
+      products: data.products,
+    },
+    revalidate: 10,
+  };
+}
+
+export default HomePage;
