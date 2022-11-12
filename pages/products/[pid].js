@@ -2,7 +2,6 @@ import path from 'path';
 import fs from 'fs/promises';
 
 function ProductDetailPage({ product }) {
-  console.log(product);
   if (!product) {
     return <p>Loading....</p>;
   }
