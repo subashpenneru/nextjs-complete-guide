@@ -5,7 +5,6 @@ import ErrorAlert from '../../components/ui/error-alert';
 import { getFilteredEvents } from '../../data/dummy-data';
 
 function FilteredEventsPage({ hasError, events, year, month }) {
-  console.log(events, year, hasError);
   if (!hasError && !events) {
     return <p className='center'>Loading...</p>;
   }
